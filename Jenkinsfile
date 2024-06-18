@@ -1,5 +1,5 @@
-def frontendImage="palczak/pandacore:frontend"
-def backendImage="palczak/pandacore:backend"
+def frontendImage="palczak/frontend"
+def backendImage="palczak/backend"
 
 pipeline {
     agent {
