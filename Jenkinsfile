@@ -5,6 +5,9 @@ pipeline {
     agent {
         label 'agent'
     }
+    tools {
+        terraform 'Terraform'
+    }
 
     environment {
         PIP_BREAK_SYSTEM_PACKAGES = 1
@@ -53,6 +56,19 @@ pipeline {
                 //sh "python3 -m pytest test/selenium/frontendTest.py"
             //}
         //}
+
+        stage('Run terraform') {
+            steps {
+                dir('Terraform') {                
+                    git branch: 'main', url: 'https://github.com/palczak/terraform'
+                    withAWS(credentials:'AWS', region: 'us-east-1') {
+                            sh 'terraform init -backend-config=bucket=agnieszka-palczak-panda-devops-core-18'
+                            sh 'terraform apply -auto-approve -var bucket_name=agnieszka-palczak-panda-devops-core-18'
+                            
+                    } 
+                }
+            }
+        }
     }
 
     post {
